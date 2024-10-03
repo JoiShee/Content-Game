@@ -1,28 +1,47 @@
-body {
-    text-align: center;
-    font-family: Arial, sans-serif;
+/* Reset default margins and paddings */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
+/* Style the body */
+body {
+    background-color: #091231; /* Matches the grid background color */
+    color: white; /* Default text color */
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Container for the game */
 #game-container {
     display: inline-block;
     margin: 20px auto;
 }
 
+/* Style the canvas */
 #gameCanvas {
     width: 100%;
     max-width: 500px;
     height: auto;
+    border: 2px solid #ccc; /* Optional border around the canvas */
 }
 
+/* Level display */
+#level-display {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+/* Instructions and messages */
+#instructions,
 #message {
-    font-size: 1.5em;
-    color: green;
-    margin-top: 20px;
+    font-size: 1em;
+    margin: 10px 0;
 }
 
-#instructions {
-    font-size: 1em;
-    color: #555;
+/* Style for the timer (if implemented) */
+#timer {
+    font-size: 1.2em;
+    margin: 10px 0;
 }
