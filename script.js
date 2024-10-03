@@ -55,10 +55,13 @@ function initObstacles(level) {
 
 // Draw the game grid
 function drawGrid() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Fill the background with the desired color
+    ctx.fillStyle = '#091231'; // Grid background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw grid lines
-    ctx.strokeStyle = '#091231'; // Updated grid color
+    ctx.strokeStyle = '#ccc'; // Grid lines color
+    ctx.lineWidth = 1;
     for (let i = 0; i <= gridCount; i++) {
         // Vertical lines
         ctx.beginPath();
