@@ -2,6 +2,10 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// Grid settings
+let gridSize; // Will be calculated in resizeCanvas()
+const gridCount = 5; // Set for a 5x5 grid
+
 // Adjust canvas size for mobile devices
 function resizeCanvas() {
     const size = Math.min(window.innerWidth, window.innerHeight, 500);
@@ -12,10 +16,6 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 
-// Grid settings
-let gridSize = 50;
-const gridCount = 10; // Adjusted for better mobile view (10x10 grid)
-
 // Player, goal, and obstacles
 let player = { x: 0, y: 0 };
 let goal = { x: gridCount - 1, y: gridCount - 1 };
@@ -25,7 +25,7 @@ let obstacles = [];
 const levelTexts = [
     "Congratulations! You've unlocked week 1's topic: Data-Centric AI",
     "Great job! Next up, week 2: Generative AI in Business",
-    "Well done! Discover on week 3: AI-Gedreven Customer Experience",
+    "Well done! Discover on week 3: AI-Driven Customer Experience",
     "Awesome! Here's week 4: Customization of AI Models",
     "You're a star! Final topic on week 5: Human-AI Collaboration"
 ];
@@ -35,16 +35,19 @@ let currentLevel = 0;
 // Initialize obstacles
 function initObstacles(level) {
     obstacles = [];
-    let obstacleCount = level + 3; // Increase obstacles with each level
+    let maxObstacles = (gridCount * gridCount) - 2; // Total cells minus player and goal
+    let obstacleCount = Math.min(level + 2, maxObstacles); // Adjust obstacle count for 5x5 grid
     while (obstacles.length < obstacleCount) {
         let obstacle = {
             x: Math.floor(Math.random() * gridCount),
             y: Math.floor(Math.random() * gridCount)
         };
         // Avoid placing obstacles on the player, goal, or existing obstacles
-        if ((obstacle.x !== player.x || obstacle.y !== player.y) &&
+        if (
+            (obstacle.x !== player.x || obstacle.y !== player.y) &&
             (obstacle.x !== goal.x || obstacle.y !== goal.y) &&
-            !obstacles.some(o => o.x === obstacle.x && o.y === obstacle.y)) {
+            !obstacles.some(o => o.x === obstacle.x && o.y === obstacle.y)
+        ) {
             obstacles.push(obstacle);
         }
     }
@@ -153,18 +156,18 @@ document.addEventListener('keydown', (e) => {
 let touchStartX = null;
 let touchStartY = null;
 
-canvas.addEventListener('touchstart', function(e) {
+canvas.addEventListener('touchstart', function (e) {
     const touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
 }, false);
 
-canvas.addEventListener('touchmove', function(e) {
+canvas.addEventListener('touchmove', function (e) {
     e.preventDefault(); // Prevent scrolling
 }, false);
 
-canvas.addEventListener('touchend', function(e) {
-    if (!touchStartX || !touchStartY) {
+canvas.addEventListener('touchend', function (e) {
+    if (touchStartX === null || touchStartY === null) {
         return;
     }
 
@@ -203,6 +206,8 @@ canvas.addEventListener('touchend', function(e) {
     checkCollision();
 }, false);
 
-// Initialize the game
-resetLevel();
-resizeCanvas(); // Adjust canvas size on load
+// Initialize the game when the window loads
+window.onload = function () {
+    resizeCanvas(); // Adjust canvas size on load
+    resetLevel();
+};
