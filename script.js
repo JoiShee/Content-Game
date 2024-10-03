@@ -58,7 +58,7 @@ function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw grid lines
-    ctx.strokeStyle = '#ccc';
+    ctx.strokeStyle = '#091231'; // Updated grid color
     for (let i = 0; i <= gridCount; i++) {
         // Vertical lines
         ctx.beginPath();
@@ -80,11 +80,11 @@ function drawGrid() {
     });
 
     // Draw goal
-    ctx.fillStyle = 'gold';
+    ctx.fillStyle = '#ff00e8'; // Updated goal color
     ctx.fillRect(goal.x * gridSize, goal.y * gridSize, gridSize, gridSize);
 
     // Draw player
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = '#16FFBB'; // Updated player color
     ctx.fillRect(player.x * gridSize, player.y * gridSize, gridSize, gridSize);
 }
 
