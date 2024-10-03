@@ -1,0 +1,28 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#game-container {
+    display: inline-block;
+    margin: 20px auto;
+}
+
+#gameCanvas {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+
+#message {
+    font-size: 1.5em;
+    color: green;
+    margin-top: 20px;
+}
+
+#instructions {
+    font-size: 1em;
+    color: #555;
+}
