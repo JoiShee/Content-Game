@@ -32,6 +32,16 @@ const levelTexts = [
 
 let currentLevel = 0;
 
+// Obstacle movement interval
+const obstacleMoveInterval = 1000; // Obstacles move every 1 second
+let obstacleInterval; // To store the interval ID
+
+// Update level display
+function updateLevelDisplay() {
+    const totalLevels = levelTexts.length;
+    document.getElementById('level-display').innerText = `Level ${currentLevel + 1}/${totalLevels}`;
+}
+
 // Initialize obstacles
 function initObstacles(level) {
     obstacles = [];
@@ -51,6 +61,56 @@ function initObstacles(level) {
             obstacles.push(obstacle);
         }
     }
+}
+
+// Move obstacles randomly
+function moveObstacles() {
+    obstacles.forEach(obstacle => {
+        // Randomly choose a direction: up, down, left, or right
+        const directions = ['up', 'down', 'left', 'right'];
+        const move = directions[Math.floor(Math.random() * directions.length)];
+
+        let newX = obstacle.x;
+        let newY = obstacle.y;
+
+        switch (move) {
+            case 'up':
+                if (obstacle.y > 0) newY--;
+                break;
+            case 'down':
+                if (obstacle.y < gridCount - 1) newY++;
+                break;
+            case 'left':
+                if (obstacle.x > 0) newX--;
+                break;
+            case 'right':
+                if (obstacle.x < gridCount - 1) newX++;
+                break;
+        }
+
+        // Check if the new position is not occupied by another obstacle, the player, or the goal
+        if (
+            !obstacles.some(o => o !== obstacle && o.x === newX && o.y === newY) &&
+            !(player.x === newX && player.y === newY) &&
+            !(goal.x === newX && goal.y === newY)
+        ) {
+            obstacle.x = newX;
+            obstacle.y = newY;
+        }
+    });
+
+    drawGrid();
+    checkCollision();
+}
+
+// Start moving obstacles
+function startObstacleMovement() {
+    obstacleInterval = setInterval(moveObstacles, obstacleMoveInterval);
+}
+
+// Stop moving obstacles
+function stopObstacleMovement() {
+    clearInterval(obstacleInterval);
 }
 
 // Draw the game grid
@@ -83,11 +143,11 @@ function drawGrid() {
     });
 
     // Draw goal
-    ctx.fillStyle = '#ff00e8'; // Updated goal color
+    ctx.fillStyle = '#16FFBB'; // Updated goal color
     ctx.fillRect(goal.x * gridSize, goal.y * gridSize, gridSize, gridSize);
 
     // Draw player
-    ctx.fillStyle = '#16FFBB'; // Updated player color
+    ctx.fillStyle = 'white'; // Updated player color
     ctx.fillRect(player.x * gridSize, player.y * gridSize, gridSize, gridSize);
 }
 
@@ -96,6 +156,7 @@ function checkCollision() {
     // Obstacle collision
     if (obstacles.some(obstacle => obstacle.x === player.x && obstacle.y === player.y)) {
         alert('You hit an obstacle! Game over.');
+        stopObstacleMovement();
         resetGame();
         return true;
     }
@@ -103,6 +164,7 @@ function checkCollision() {
     if (player.x === goal.x && player.y === goal.y) {
         document.getElementById('message').innerText = levelTexts[currentLevel];
         currentLevel++;
+        stopObstacleMovement();
         if (currentLevel < levelTexts.length) {
             alert('Level Complete! Weekly AI Update topic revealed.');
             resetLevel();
@@ -120,14 +182,19 @@ function resetLevel() {
     player = { x: 0, y: 0 };
     goal = { x: gridCount - 1, y: gridCount - 1 };
     initObstacles(currentLevel);
+    stopObstacleMovement();
     drawGrid();
+    startObstacleMovement();
+    updateLevelDisplay(); // Update the level display
 }
 
 // Reset game
 function resetGame() {
     currentLevel = 0;
     document.getElementById('message').innerText = '';
+    stopObstacleMovement();
     resetLevel();
+    updateLevelDisplay(); // Update the level display
 }
 
 // Keyboard controls
@@ -213,4 +280,5 @@ canvas.addEventListener('touchend', function (e) {
 window.onload = function () {
     resizeCanvas(); // Adjust canvas size on load
     resetLevel();
+    updateLevelDisplay(); // Initialize level display
 };
