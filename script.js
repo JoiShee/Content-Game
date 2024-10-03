@@ -13,8 +13,8 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 
 // Grid settings
-let gridSize = 25;
-const gridCount = 5; // Adjusted for better mobile view (10x10 grid)
+let gridSize = 50;
+const gridCount = 10; // Adjusted for better mobile view (10x10 grid)
 
 // Player, goal, and obstacles
 let player = { x: 0, y: 0 };
